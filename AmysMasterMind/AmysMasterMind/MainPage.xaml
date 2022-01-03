@@ -1,0 +1,80 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="AmysMasterMind.MainPage">
+
+    <StackLayout x:Name="SLContentPage">
+
+        <Label Text="Amys MasterMind Ever!!"
+               HorizontalOptions="Center" Margin="0,10"/>
+
+        <Frame BackgroundColor="LightGray" Margin="0, 4" HorizontalOptions="Center">
+            <!-- replace this with code to guess -->
+            <StackLayout x:Name="SLCode" Orientation="Horizontal">
+                <BoxView x:Name="BVColour0" Color="RosyBrown"
+                     HeightRequest="24" WidthRequest="24"
+                     CornerRadius="12" Margin="2"/>
+                <BoxView x:Name="BVColour1" Color="RosyBrown"
+                     HeightRequest="24" WidthRequest="24"
+                     CornerRadius="12" Margin="2"/>
+                <BoxView x:Name="BVColour2" Color="RosyBrown"
+                     HeightRequest="24" WidthRequest="24"
+                     CornerRadius="12" Margin="2"/>
+                <BoxView x:Name="BVColour3" Color="RosyBrown"
+                     HeightRequest="24" WidthRequest="24"
+                     CornerRadius="12" Margin="2"/>
+            </StackLayout>
+        </Frame>
+
+        <Grid x:Name="GrdGame" Margin="0,10"
+              HorizontalOptions="Center"
+              WidthRequest="270" BackgroundColor="SlateGray">
+            <!-- this holds the game 
+                 Comprises of 10 turns, each identical
+                 use 6 columns, 10 rows -->
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+
+        </Grid> <!-- End of main grid-->
+
+        <Grid x:Name="GrdColourChoice" Margin="0,10"
+              HorizontalOptions="Center"
+              WidthRequest="200" BackgroundColor="SlateGray">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <!-- 2 Rows -->
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <!-- 4 Coloumns -->
+        </Grid>
+
+        <Button x:Name="BtnNewGame" Text="New Game"
+                HorizontalOptions="Center" Margin="0, 10"
+                Clicked="BtnNewGame_Clicked"/>
+    </StackLayout>
+
+</ContentPage>
