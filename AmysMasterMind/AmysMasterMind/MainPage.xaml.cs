@@ -20,33 +20,29 @@ namespace AmysMasterMind
         private int _checkBtnCol = 5;
         private int _number_pegs = 4;
         private int _currentRow;
-        private Color _emptyColour = Color.RosyBrown;
+        private Color _emptyColour = Color.Peru;
         private Color _currentColour;
 
-        // array of colours for generating the code
-        // setting up the grid to choose from
-        // an integer array of 4 numbers
-        // int[] iArray = new int[] {1,2,3,4};
-
+        //Creating all the random colours in an array
         Color[] myColours = new Color[]
                             {Color.Black, Color.Yellow,
                             Color.Red, Color.Green,
                             Color.White, Color.Brown,
                             Color.Blue, Color.Orange};
 
-        // myColours[1] = Color.Yellow;
-        // boxview.Color = myColours[1] same as Color.Yellow
-
+        // an integer array of 4 numbers
         Color[] _userGuess = new Color[4];
-        Color[] _theCode = new Color[4];    // fill in GenerateCode
+
+        // filling in the GenerateCode for user to guess
+        Color[] _theCode = new Color[4]; 
 
         public MainPage()
         {
             InitializeComponent();
-            // add row 2
             GenerateTheBoard();
         }
 
+        //Creating the new game part
         private void GenerateTheBoard()
         {
             int row = 1;
@@ -54,42 +50,20 @@ namespace AmysMasterMind
             {
                 CreateOneRow(row);
             }
-            // add the check answer button
-            // add this in row = NUM_OF_TURNS - 1
+           
             AddCheckAnswerButton(NUM_OF_TURNS - 1);
             DisplayAlert("New Game", "Press New Game to Start!", "OK");
         }
 
-
-        private void AddCheckAnswerButton(int row)
+        private void GuessButonCheck_Clicked(object sender, EventArgs e)
         {
-            Button b;
-            b = new Button();   // instantiate
-            b.Text = "Check";
-            b.SetValue(Grid.RowProperty, row);
-            b.SetValue(Grid.ColumnProperty, _checkBtnCol);
-            b.Margin = 2;
-            b.HorizontalOptions = LayoutOptions.Center;
-            b.VerticalOptions = LayoutOptions.Center;
-            // clicked event
-            b.Clicked += CheckGuessButton_Clicked;
-            // add to the board somewhere
-            GrdGame.Children.Add(b);
-            // set a value for the current row
-            _currentRow = row;
-        }
-
-        private void CheckGuessButton_Clicked(object sender, EventArgs e)
-        {
-            // change the current row of the button 
-            // to one less
             Button b;
             int row;
 
             if (!IsCurrentRowFull())   // returns false
             {
                 // give user a message - fill in the values
-                DisplayAlert("Hey!!!",
+                DisplayAlert("Hey Dummy",
                              "Choose four colours!!!",
                              "Ok");
                 return;
@@ -118,6 +92,67 @@ namespace AmysMasterMind
             _currentRow = row - 1;
         }
 
+        //i Am as far as here//////////////////////////////////////////////////
+
+        private void AddCheckAnswerButton(int row)
+        {
+            Button b;
+            b = new Button(); 
+            b.Text = "Check"; //This doesnt fit on my screen only "ch"
+            b.SetValue(Grid.RowProperty, row);
+            b.SetValue(Grid.ColumnProperty, _checkBtnCol);
+            b.Margin = 2;
+            b.HorizontalOptions = LayoutOptions.Center;
+            b.VerticalOptions = LayoutOptions.Center;
+          
+            // When it is clicked
+            b.Clicked += CheckGuessButton_Clicked;
+            // add to the board
+            GrdEntered.Children.Add(b);
+            // set a value for the current row
+            _currentRow = row;
+        }
+
+        private void GuessButonCheck_Clicked(object sender, EventArgs e)
+        {
+            // change the current row of the button 
+            // to one less
+            Button b;
+            int row;
+
+            if (!IsCurrentRowFull())   // returns false
+            {
+                // give user a message - fill in the values
+                DisplayAlert("Hey Dummy",
+                             "Choose four colours!!!",
+                             "Ok");
+                return;
+            }
+
+            if (_currentRow == 0)
+            {
+                return; // no more guesses
+            }
+
+            b = (Button)sender;
+            row = (int)b.GetValue(Grid.RowProperty);
+
+            // check the guess here....
+            // 3 if statements
+            // it would be nice to compare two arrays
+            // need to add to the array when the user selects
+            // a colour
+
+            CheckTheGuess();
+
+            b.SetValue(Grid.RowProperty, row - 1);
+
+            // reset the value of the current row
+            // help in UserTurnSpace_Tapped
+            _currentRow = row - 1;
+        }
+
+        //FIXED THIS KINDA - put it in for loop
         private void CheckTheGuess()
         {
             // need to compare the userguess against thecode and then give feedback based on that.
@@ -128,50 +163,35 @@ namespace AmysMasterMind
             // need an array for feedback
             //could use a colour array - difficult to sort
             // use an array of ints - 2=black, 1=white
-            int[] fb = new int[4] { 0, 0, 0, 0 };
-            int i, j, f, score;
-            Grid grdFB = null; // find this one
+            int whitePegs = 0;
+            int blackPegs = 0;
 
-            f = 0;
-            i = 0;
-            score = 0;
-            while (i < _number_pegs)
+            // Check number of black/white pegs to give
+            for (int x = 0; x < 4; x++)
             {
-                if (_theCode[i] == _userGuess[i])
+                bool whiteMatched = false;
+                for (int y = 0; y < 4; y++)
                 {
-                    fb[f++] = 2; // black peg
-                    score += 2;
-                }
-                else
-                {
-                    // check for white peg
-                    for (j = 0; j < _number_pegs; j++)
+                    if (_theCode[x] == _userGuess[y])
                     {
-                        if (_theCode[i] == _userGuess[i])
+                        if (whiteMatched == false)
                         {
-                            fb[f++] = 1; // white peg
-                            j = _number_pegs + 1;
+                            whitePegs++;
+                            whiteMatched = true;
+                        }
+
+                        if (x == y)
+                        {
+                            blackPegs++;
                         }
                     }
-                } // end if(_userGuess[i])
+                }
+            }
 
-                i++;
-            } // end while (i < _number_pegs)
-
-            Array.Sort(fb);
-            Array.Reverse(fb);
-
-
-
-            /*DisplayAlert("Feedback",
-                        fb[0] + ", " +
-                        fb[1] + ", " +
-                        fb[2] + ", " +
-                        fb[3] + "OK");*/
-
+            Grid grdFB = null;
             // array is full, display feedback
             // need to find the feedback grid on the _currentRow
-            foreach (var item in GrdGame.Children)
+            foreach (var item in GrdEntered.Children)
             {
 
                 if (item.GetType() == typeof(Grid))
@@ -189,8 +209,9 @@ namespace AmysMasterMind
 
             // fill in the feedback
             // use i for rows, j for cols, f for the counter
-            f = 0; // start at fb[f = 0]
-            i = 0; j = 0; // start on ROW 0 COL 0
+            int f = 0; // start at fb[f = 0]
+            int i = 0;
+            int j = 0; // start on ROW 0 COL 0
             BoxView b;
 
             while (f < 4)
@@ -200,11 +221,11 @@ namespace AmysMasterMind
                 #region Create One BoxView
                 b = new BoxView(); // instantiate
                 b.BackgroundColor = _emptyColour;
-                if (fb[f] == 2)
+                if (f < blackPegs)
                 {
                     b.BackgroundColor = Color.Black;
                 }
-                else if (fb[f] == 1)
+                else if (f < whitePegs)
                 {
                     b.BackgroundColor = Color.White;
                 }
@@ -241,7 +262,7 @@ namespace AmysMasterMind
             } // while (f < 4)
 
             // if score == win
-            if (score == (_number_pegs * 2))
+            if (blackPegs == 4)
             {
                 DisplayAlert("Winner", "Congratulations", "");
             }
@@ -253,7 +274,7 @@ namespace AmysMasterMind
             bool answer = true;
             // check all the boxviews on that row
             // _currentRow
-            foreach (var item in GrdGame.Children)
+            foreach (var item in GrdEntered.Children)
             {   // if it has a type equal to boxview
                 if (item.GetType() == typeof(BoxView))
                 {
@@ -297,7 +318,7 @@ namespace AmysMasterMind
             //add 2 columns
             g.ColumnDefinitions.Add(new ColumnDefinition());
             g.ColumnDefinitions.Add(new ColumnDefinition());
-            GrdGame.Children.Add(g);
+            GrdEntered.Children.Add(g);
 
             #endregion
 
@@ -308,7 +329,7 @@ namespace AmysMasterMind
                 {
                     #region Create One BoxView
                     b = new BoxView(); // instantiate
-                    b.Color = Color.RosyBrown;
+                    b.Color = Color.Peru;
                     b.Margin = 2;
                     b.SetValue(Grid.RowProperty, r);
                     b.SetValue(Grid.ColumnProperty, c);
@@ -318,6 +339,12 @@ namespace AmysMasterMind
                     b.WidthRequest = 8;
                     b.CornerRadius = 4;
                     g.Children.Add(b);
+
+                    //when game is over  display the colours
+                    if()
+                    {
+
+                    }
 
                     #endregion
 
@@ -350,7 +377,7 @@ namespace AmysMasterMind
                 #endregion
 
                 // add to the game grid
-                GrdGame.Children.Add(b);
+                GrdEntered.Children.Add(b);
 
             } // end for (col = 1
 
@@ -360,7 +387,7 @@ namespace AmysMasterMind
             CreateColourChoiceGrid();
             #endregion
 
-            // add everything to the GrdGame children
+            // add everything to the "GrdEntered" children
 
         }
 
@@ -441,7 +468,7 @@ namespace AmysMasterMind
 
             // clear the board - foreach, if child == boxview, color
             // reset the currentrow value
-            foreach (var item in GrdGame.Children)
+            foreach (var item in GrdEntered.Children)
             {
                 if (item.GetType() == typeof(BoxView))
                 {
@@ -451,11 +478,11 @@ namespace AmysMasterMind
                 if (item.GetType() == typeof(Grid))
                 {
                     // feedback grid has 4 children
-                    foreach (var bv in ((Grid)item).Children)
+                    foreach (var My in ((Grid)item).Children)
                     {
-                        if (bv.GetType() == typeof(BoxView))
+                        if (My.GetType() == typeof(BoxView))
                         {
-                            ((BoxView)bv).Color = _emptyColour;
+                            ((BoxView)My).Color = _emptyColour;
                         }
                     }
                 }
@@ -469,7 +496,7 @@ namespace AmysMasterMind
             } // end foreach
             _currentRow = NUM_OF_TURNS - 1;
 
-            SLCode.IsVisible = false;
+            display.IsVisible = false;
         }
 
         private void GenerateNewCode()
@@ -506,17 +533,18 @@ namespace AmysMasterMind
             } // while
 
             // now have a unique set
-            BVColour0.Color = myColours[iCode[0]];
-            BVColour1.Color = myColours[iCode[1]];
-            BVColour2.Color = myColours[iCode[2]];
-            BVColour3.Color = myColours[iCode[3]];
+            MyColour0.Color = myColours[iCode[0]];
+            MyColour1.Color = myColours[iCode[1]];
+            MyColour2.Color = myColours[iCode[2]];
+            MyColour3.Color = myColours[iCode[3]];
 
             // store in the global array for checking the guesses
             _theCode[0] = myColours[iCode[0]];
             _theCode[1] = myColours[iCode[1]];
             _theCode[2] = myColours[iCode[2]];
             _theCode[3] = myColours[iCode[3]];
+
+            Console.WriteLine("0 positio "+ _theCode[0]);
         }
     }
 }
-

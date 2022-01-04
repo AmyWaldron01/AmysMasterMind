@@ -3,35 +3,32 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="AmysMasterMind.MainPage">
 
-    <StackLayout x:Name="SLContentPage">
+    <StackLayout>
 
-        <Label Text="Amys MasterMind Ever!!"
-               HorizontalOptions="Center" Margin="0,10"/>
+        <Label Text="Amy's MasterMind" FontSize="20"  HorizontalOptions="Center" Margin="0,10"/>
 
-        <Frame BackgroundColor="LightGray" Margin="0, 4" HorizontalOptions="Center">
-            <!-- replace this with code to guess -->
-            <StackLayout x:Name="SLCode" Orientation="Horizontal">
-                <BoxView x:Name="BVColour0" Color="RosyBrown"
+        <Frame BorderColor="CornflowerBlue"  WidthRequest=" 250" BackgroundColor="LightGray" Margin="0, 4" HorizontalOptions="Center">
+         
+            <!-- This stacklayout is where the right user colours will be displayed-->
+            <StackLayout x:Name="display" Orientation="Horizontal">
+                <BoxView x:Name="MyColour0" Color="peru"
                      HeightRequest="24" WidthRequest="24"
                      CornerRadius="12" Margin="2"/>
-                <BoxView x:Name="BVColour1" Color="RosyBrown"
+                <BoxView x:Name="MyColour1" Color="peru"
                      HeightRequest="24" WidthRequest="24"
                      CornerRadius="12" Margin="2"/>
-                <BoxView x:Name="BVColour2" Color="RosyBrown"
+                <BoxView x:Name="MyColour2" Color="peru"
                      HeightRequest="24" WidthRequest="24"
                      CornerRadius="12" Margin="2"/>
-                <BoxView x:Name="BVColour3" Color="RosyBrown"
+                <BoxView x:Name="MyColour3" Color="peru"
                      HeightRequest="24" WidthRequest="24"
                      CornerRadius="12" Margin="2"/>
             </StackLayout>
         </Frame>
 
-        <Grid x:Name="GrdGame" Margin="0,10"
-              HorizontalOptions="Center"
-              WidthRequest="270" BackgroundColor="SlateGray">
-            <!-- this holds the game 
-                 Comprises of 10 turns, each identical
-                 use 6 columns, 10 rows -->
+        <!-- This grid is for holding all the entered colours-->
+        <Grid x:Name="GrdEntered" Margin="0,10"   HorizontalOptions="Center"  WidthRequest="400"  HeightRequest="800" BackgroundColor="LightSlateGray">
+            
             <Grid.RowDefinitions>
                 <RowDefinition/>
                 <RowDefinition/>
@@ -52,29 +49,30 @@
                 <ColumnDefinition/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-
-        </Grid> <!-- End of main grid-->
-
-        <Grid x:Name="GrdColourChoice" Margin="0,10"
-              HorizontalOptions="Center"
-              WidthRequest="200" BackgroundColor="SlateGray">
-            <Grid.RowDefinitions>
-                <RowDefinition/>
-                <RowDefinition/>
-            </Grid.RowDefinitions>
-            <!-- 2 Rows -->
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-            </Grid.ColumnDefinitions>
-            <!-- 4 Coloumns -->
         </Grid>
 
+        <!-- This grid is for holding all the colours-->
+        <Grid x:Name="GrdColourChoice" Margin="0,10" HorizontalOptions="Center"  WidthRequest="400" HeightRequest="100" BackgroundColor="LightSlateGray">
+           
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+
+        </Grid>
+
+        <!-- This is for the new game button-->
         <Button x:Name="BtnNewGame" Text="New Game"
                 HorizontalOptions="Center" Margin="0, 10"
                 Clicked="BtnNewGame_Clicked"/>
+
     </StackLayout>
 
 </ContentPage>
