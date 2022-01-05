@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,9 +25,15 @@ namespace AmysMasterMind
         private Color emptyColour = Color.Peru;
         private Color selected_colour;
 
+        // a 2D int array to save user data
+       // private List<int[]> saveData;
+       private int[] firstRowData = new int[4];
+
         //Creating all the random colours in an array
         Color[] myColours = new Color[]
-                            {Color.Pink, Color.Green,  Color.Red, Color.Yellow,  Color.Blue, Color.Purple,  Color.Pink, Color.Black};
+                            {Color.White, Color.Green,  Color.Red, Color.Yellow,  Color.Blue, Color.Purple,  Color.Pink, Color.Black};
+
+        int counterOfAnswers;
 
         // an integer array of 4 numbers
         Color[] _userGuess = new Color[4];
@@ -118,7 +126,7 @@ namespace AmysMasterMind
                     b.CornerRadius = 4;
                     g.Children.Add(b);
 
-                    //when game is over 
+
 
 
                     #endregion
@@ -180,8 +188,25 @@ namespace AmysMasterMind
             b = (Button)sender;
             row = (int)b.GetValue(Grid.RowProperty);
 
-            //checking if the users guess is correct / incorrect
+            // all four colors has been picked up
+            // let's check what are these colours - (with number)
+            int[] colorIndexs = new int[4];
+            for(int i = 0; i < _userGuess.Length; i++)
+            {
+                int colorCounter = 0;
+                foreach (Color eachColor in myColours)
+                {
+                    if (_userGuess[i] == eachColor)
+                        colorIndexs[i] = colorCounter;
+                    colorCounter++;                             
+                }
+            }
+            // Debug.WriteLine(colorIndexs[3]);
+            // [0, 7, 4, 5] gonna save this to a 2D array (an int array nested in a list)
+            //saveData.Add(colorIndexs);
+            firstRowData = colorIndexs;
 
+            //checking if the users guess is correct / incorrect
             CheckingUsersGuess();
 
             b.SetValue(Grid.RowProperty, row - 1);
@@ -417,6 +442,26 @@ namespace AmysMasterMind
             currentRow = NUM_OF_TURNS - 1;
 
             display.IsVisible = false;
+
+            // save prev Data (if it exist)
+            //File and path you want to create and write to
+            //string fileName = @"C:\Users\amywa\Downloads\saveData\saveData.txt";
+            string fileName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "temp.txt");
+            //C:\Users\amywa\OneDrive - GMIT\App Development\AmysMasterMind
+            // C:\Users\amywa\Downloads\saveData
+            //Check if the file exists
+            if (firstRowData != null)
+            {
+                // Create the file and use streamWriter to write text to it.
+                //If the file existence is not check, this will overwrite said file.
+                //Use the using block so the file can close and vairable disposed correctly
+                using (StreamWriter writer = File.CreateText(fileName))
+                {
+                    writer.WriteLine("[" + firstRowData[0] + ", " + firstRowData[1] + ", " + firstRowData[2] + ", "  + firstRowData[3] + "]");
+                   
+                }
+            }
+            Debug.WriteLine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData));
         }
 
         private void GenerateNewCode()
