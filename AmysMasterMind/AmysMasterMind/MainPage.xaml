@@ -7,7 +7,7 @@
 
         <Label Text="Amy's MasterMind" FontSize="20"  HorizontalOptions="Center" Margin="0,10"/>
 
-        <Frame BorderColor="CornflowerBlue"  WidthRequest=" 250" BackgroundColor="LightGray" Margin="0, 4" HorizontalOptions="Center">
+        <Frame BorderColor="CornflowerBlue"  BackgroundColor="LightGray" Margin="0, 4" HorizontalOptions="Center">
          
             <!-- This stacklayout is where the right user colours will be displayed-->
             <StackLayout x:Name="display" Orientation="Horizontal">
