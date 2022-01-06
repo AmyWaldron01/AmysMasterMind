@@ -25,6 +25,7 @@ namespace AmysMasterMind
         private Color emptyColour = Color.Peru;
         private Color selected_colour;
 
+        //TRIAL AND ERROR
         // a 2D int array to save user data
        // private List<int[]> saveData;
        private int[] firstRowData = new int[4];
@@ -337,6 +338,24 @@ namespace AmysMasterMind
         }
 
 
+         private void UserTurnSpace_Tapped(object sender, EventArgs e)
+        {
+            BoxView b = (BoxView)sender;
+            // place the currentColour on the sender
+            // check that the user tapped on a boxview
+            // on the same row as the currentRow
+            if (((int)b.GetValue(Grid.RowProperty) != currentRow) ||
+                (selected_colour == null))
+            {
+                return;
+            }
+
+            b.Color = selected_colour;
+            //  addining it to a guess arrray. -1 to go to next column
+            _userGuess[(int)b.GetValue(Grid.ColumnProperty) - 1] = b.Color;
+        }
+
+
         private void MakingColourChosenGrid()
         {
             int r, c = 0, iColour = 0;
@@ -382,37 +401,19 @@ namespace AmysMasterMind
 
         //HERE/////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        private void UserTurnSpace_Tapped(object sender, EventArgs e)
-        {
-            BoxView b = (BoxView)sender;
-            // place the currentColour on the sender
-            // check that the user tapped on a boxview
-            // on the same row as the currentRow
-            if (((int)b.GetValue(Grid.RowProperty) != currentRow) ||
-                (selected_colour == null))
-            {
-                return;
-            }
+        
+        //Get rid 
+        //private void EmptySpace_Clicked(object sender, EventArgs e)
+        //{
 
-            b.Color = selected_colour;
-            // add this to a guess array
-            // subscript = b.Column - 1
-            _userGuess[(int)b.GetValue(Grid.ColumnProperty) - 1] =
-                                                            b.Color;
-        }
-
-        private void EmptySpace_Clicked(object sender, EventArgs e)
-        {
-
-        }
+        //}
 
         private void BtnNewGame_Clicked(object sender, EventArgs e)
         {
-            // generate a new code 
-            GenerateNewCode();
+            // New code being generate
+            CreateNewCode();
 
-            // clear the board - foreach, if child == boxview, color
-            // reset the currentrow value
+            //clearing the board and reset the currentrow value
             foreach (var item in GrdEntered.Children)
             {
                 if (item.GetType() == typeof(BoxView))
@@ -438,11 +439,12 @@ namespace AmysMasterMind
                     ((Button)item).SetValue(Grid.RowProperty, NUM_OF_TURNS - 1);
 
                 }
-            } // end foreach
+            } //End of for each
             currentRow = NUM_OF_TURNS - 1;
 
-            display.IsVisible = false;
+            display.IsVisible = false;/////THIS IS THE ANSWERS 
 
+            //THIS IS ALL TRIAL AND ERROR FOR SAVING GAME-----------------------------------------------------------------------------
             // save prev Data (if it exist)
             //File and path you want to create and write to
             //string fileName = @"C:\Users\amywa\Downloads\saveData\saveData.txt";
@@ -464,20 +466,15 @@ namespace AmysMasterMind
             Debug.WriteLine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData));
         }
 
-        private void GenerateNewCode()
+        private void CreateNewCode()
         {
-            // generate an array of 4 different integers
-            // no duplicates
+            //Creaiting an array of 4 differnt ints with none the same
             int[] iCode = new int[] { -1, -1, -1, -1 };
             int current, numColours;
             Boolean HasDuplicates = false;
-            // random number generator
+          
+            // Creating a new Random number
             Random random = new Random(DateTime.Now.Millisecond);
-
-            //    current = random.Next(0, 8);
-            //   iCode[0] = current;
-
-            // will loop
 
             numColours = 0;
             while (numColours < 4)
@@ -489,15 +486,15 @@ namespace AmysMasterMind
                     if (iCode[index] == current)
                     {
                         HasDuplicates = true;
-                    } // if
-                } // for
+                    } 
+                }
                 if (HasDuplicates == false)
                 {
                     iCode[numColours++] = current;
-                } // if
-            } // while
+                } 
+            }
 
-            // now have a unique set
+            //Have a new set  - all differnt
             MyColour0.Color = myColours[iCode[0]];
             MyColour1.Color = myColours[iCode[1]];
             MyColour2.Color = myColours[iCode[2]];
@@ -509,7 +506,7 @@ namespace AmysMasterMind
             _theCode[2] = myColours[iCode[2]];
             _theCode[3] = myColours[iCode[3]];
 
-            Console.WriteLine("0 positio "+ _theCode[0]);
+            Debug.WriteLine("0 position "+ _theCode[0]);
         }
     }
 }
