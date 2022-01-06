@@ -22,7 +22,7 @@ namespace AmysMasterMind
         private int number_of_pegs = 4;
         private int checkColBtn = 5;
         private int currentRow;
-        private Color emptyColour = Color.Peru;
+        private Color emptyColour = Color.Sienna;
         private Color selected_colour;
 
         //TRIAL AND ERROR
@@ -116,7 +116,7 @@ namespace AmysMasterMind
                 {
                     #region Create One BoxView
                     b = new BoxView(); // instantiate
-                    b.Color = Color.Peru;
+                    b.Color = Color.Sienna;
                     b.Margin = 2;
                     b.SetValue(Grid.RowProperty, r);
                     b.SetValue(Grid.ColumnProperty, c);
@@ -442,7 +442,7 @@ namespace AmysMasterMind
             } //End of for each
             currentRow = NUM_OF_TURNS - 1;
 
-            display.IsVisible = false;/////THIS IS THE ANSWERS 
+            display.IsVisible = true;/////THIS IS THE ANSWERS 
 
             //THIS IS ALL TRIAL AND ERROR FOR SAVING GAME-----------------------------------------------------------------------------
             // save prev Data (if it exist)
