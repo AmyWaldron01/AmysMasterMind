@@ -68,11 +68,25 @@
 
         </Grid>
 
-        <!-- This is for the new game button-->
-        <Button x:Name="BtnNewGame" Text="New Game"
-                HorizontalOptions="Center" Margin="0, 10"
-                Clicked="BtnNewGame_Clicked"/>
+        <!-- want to make this on the same line as button-->
+        <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
+            <!-- This is for the new game button-->
+            <Button x:Name="BtnNewGame" Text="New Game"
+                    HorizontalOptions="Center" Margin="0, 10"
+                    Clicked="BtnNewGame_Clicked"/>
 
+    
+            <!-- This is for the save game button-->
+            <Button x:Name="BtnSaveGame" Text="Save Game"
+                    HorizontalOptions="Center" Margin="0, 10"
+                    Clicked="BtnSaveGame_Clicked"/>
+
+            <!-- This is for the load game button-->
+            <Button x:Name="BtnLoadGame" Text="Load Game"
+                    HorizontalOptions="Center" Margin="0, 10"
+                    Clicked="BtnLoadGame_Clicked"/>
+        </StackLayout>
+        
     </StackLayout>
 
 </ContentPage>

@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Xamarin.Forms;
-
+using Newtonsoft.Json;
 namespace AmysMasterMind
 {
     [DesignTimeVisible(false)]
@@ -28,7 +28,9 @@ namespace AmysMasterMind
         //TRIAL AND ERROR
         // a 2D int array to save user data
        // private List<int[]> saveData;
-       private int[] firstRowData = new int[4];
+        private int[] firstRowData = new int[4];
+        private GameData gameData = new GameData();
+        private int lastRowBlkPegs = 0;
 
         //Creating all the random colours in an array
         Color[] myColours = new Color[]
@@ -94,7 +96,7 @@ namespace AmysMasterMind
             #region Create Feedback Grid
             g = new Grid();
             g.Margin = 2;
-            g.SetValue(Grid.RowProperty, row);
+            g.SetValue(Grid.RowProperty, 9-row);
             g.SetValue(Grid.ColumnProperty, col);
             g.HorizontalOptions = LayoutOptions.Center;
             g.VerticalOptions = LayoutOptions.Center;
@@ -141,14 +143,39 @@ namespace AmysMasterMind
 
                 b = new BoxView(); // instantiate
                 b.Margin = 2;
-                b.SetValue(Grid.RowProperty, row);
+                b.SetValue(Grid.RowProperty, 9-row);
                 b.SetValue(Grid.ColumnProperty, col);
                 b.HorizontalOptions = LayoutOptions.Center;
                 b.VerticalOptions = LayoutOptions.Center;
                 b.HeightRequest = PEG_SIZE;
                 b.WidthRequest = PEG_SIZE;
                 b.CornerRadius = PEG_SIZE / 2;
-                b.Color = emptyColour;
+                //b.Color = emptyColour; // default grid colour
+
+                // row 0, 1,....9
+                // 9, 8 ,7
+                // 0
+                if (row < gameData.rows)
+                {
+                    switch (col){
+                        case 1:
+                            b.Color = myColours[gameData.posData[row, col - 1]];
+                            break;
+                        case 2:
+                            b.Color = myColours[gameData.posData[row, col - 1]];
+                            break;
+                        case 3:
+                            b.Color = myColours[gameData.posData[row, col - 1]];
+                            break;
+                        case 4:
+                            b.Color = myColours[gameData.posData[row, col - 1]];
+                            break;
+                    }
+                } else
+                {
+                    b.Color = emptyColour;
+                }
+
                 // add tap event
                 b.GestureRecognizers.Add(tap);
 
@@ -183,6 +210,12 @@ namespace AmysMasterMind
             //if u picked all 4 colours
             if (currentRow == 0)
             {
+                Debug.WriteLine("this is the line num 10");
+                display.IsVisible = true;/////THIS IS THE ANSWERS 
+
+                //display alert.
+                DisplayAlert("You Lost!", "Hard Luck", " continue ");
+
                 return; 
             }
 
@@ -206,9 +239,25 @@ namespace AmysMasterMind
             // [0, 7, 4, 5] gonna save this to a 2D array (an int array nested in a list)
             //saveData.Add(colorIndexs);
             firstRowData = colorIndexs;
+            // save eachRow data (colorIndexs) in gameData
+            gameData.rows++;
+            for (int i = 0; i < 4; i++)
+            {
+                gameData.posData[gameData.rows - 1, i] = colorIndexs[i];
+            }
 
             //checking if the users guess is correct / incorrect
             CheckingUsersGuess();
+
+            // check if it's the last row
+            /*
+            Debug.WriteLine(gameData.rows);
+            if (gameData.rows == 10 && lastRowBlkPegs < 4)
+            {
+                Debug.WriteLine("abcde");
+                display.IsVisible = true;/////THIS IS THE ANSWERS 
+            }
+            */
 
             b.SetValue(Grid.RowProperty, row - 1);
 
@@ -308,9 +357,9 @@ namespace AmysMasterMind
             // if the score was a win //ALl BLACKPEGS---------------------------------------------------
             if (blackPegs == 4)
             {
-                DisplayAlert("You Won!", "Well Done", "");
+                DisplayAlert("You Won!", "Well Done", " continue ");
             }
-
+            lastRowBlkPegs = blackPegs;
         }
 
         private bool CheckIfRowIsFull()
@@ -399,14 +448,6 @@ namespace AmysMasterMind
 
         }
 
-        //HERE/////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-        
-        //Get rid 
-        //private void EmptySpace_Clicked(object sender, EventArgs e)
-        //{
-
-        //}
 
         private void BtnNewGame_Clicked(object sender, EventArgs e)
         {
@@ -442,7 +483,7 @@ namespace AmysMasterMind
             } //End of for each
             currentRow = NUM_OF_TURNS - 1;
 
-            display.IsVisible = true;/////THIS IS THE ANSWERS 
+            display.IsVisible = false;/////THIS IS THE ANSWERS 
 
             //THIS IS ALL TRIAL AND ERROR FOR SAVING GAME-----------------------------------------------------------------------------
             // save prev Data (if it exist)
@@ -507,6 +548,35 @@ namespace AmysMasterMind
             _theCode[3] = myColours[iCode[3]];
 
             Debug.WriteLine("0 position "+ _theCode[0]);
+        }
+
+        private void BtnSaveGame_Clicked(object sender, EventArgs e)
+        {
+            //string workingDirectory = Environment.CurrentDirectory; // access denied
+            //string projectDirectory = Directory.GetParent(workingDirectory).Parent.Parent.Parent.Parent.Parent.FullName;
+            //Debug.WriteLine(projectDirectory);
+            string persistentPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+            string filePath = Path.Combine(persistentPath, "Save.json");
+
+            string text = JsonConvert.SerializeObject(gameData);
+            File.WriteAllText(filePath, text);
+        }
+
+        private void BtnLoadGame_Clicked(object sender, EventArgs e)
+        {
+            string persistentPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+            string filePath = Path.Combine(persistentPath, "Save.json");
+
+            if (File.Exists(filePath) == false)
+            {
+                DisplayAlert("No save game found!", "Save a game to load it later", "Close");
+                return;
+            }
+
+            string text = File.ReadAllText(filePath);
+            gameData = JsonConvert.DeserializeObject<GameData>(text);
+
+            CreatingTheBoard();
         }
     }
 }

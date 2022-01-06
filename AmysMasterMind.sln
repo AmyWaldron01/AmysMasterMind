@@ -7,7 +7,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AmysMasterMind.UWP", "AmysM
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AmysMasterMind.Android", "AmysMasterMind\AmysMasterMind.Android\AmysMasterMind.Android.csproj", "{543A851D-1AEB-434C-A213-6DA450EFBE88}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AmysMasterMind", "AmysMasterMind\AmysMasterMind\AmysMasterMind.csproj", "{B4E63805-2624-4748-8288-5BBFDF81C637}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AmysMasterMind", "AmysMasterMind\AmysMasterMind\AmysMasterMind.csproj", "{B4E63805-2624-4748-8288-5BBFDF81C637}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{1E697BF3-D449-49CC-8E11-E9A132C563D9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
